@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -82,7 +83,7 @@ public class MainDialog extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				//brian.test();
-				Image i = null;
+				BufferedImage i = null;
 				try {
 					i = brian.readFile();
 				} catch (IOException e) {

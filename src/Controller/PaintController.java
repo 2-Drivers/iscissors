@@ -4,6 +4,7 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class PaintController {
 		return new Tester(s);
 	}
 	
-	public Image readFile() throws IOException {
+	public BufferedImage readFile() throws IOException {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter f = new FileNameExtensionFilter(
 				"JPG & GIF Images", "jpg", "gif");
@@ -51,7 +52,7 @@ public class PaintController {
 		int returnVal = chooser.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File f2 = chooser.getSelectedFile();
-			Image returnValue = ImageIO.read(f2);
+			BufferedImage returnValue = ImageIO.read(f2);
 			return returnValue;
 		} else return null;
 	}

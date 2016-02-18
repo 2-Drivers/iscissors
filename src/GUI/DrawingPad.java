@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
@@ -14,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.MouseInputAdapter;
 
 import Controller.PaintController;
 
@@ -26,11 +28,15 @@ import Controller.PaintController;
 public class DrawingPad extends JPanel {
 	//JPanel realPanel;
 	Image i;
+	MouseController m;
+	int xOfMouse, yOfMouse = Integer.MAX_VALUE;
 	
 	public DrawingPad() {
 		setBackground(Color.GREEN);
 		setPreferredSize(new Dimension(400,300));
 		i = null;
+		m = new MouseController();
+		this.addMouseListener(m);
 		//setVisible(true);
 	}
 
@@ -42,7 +48,22 @@ public class DrawingPad extends JPanel {
 		setPreferredSize(new Dimension(width, height));
 	}
 	
+	public void paint(Graphics g) {
+		g.drawOval(xOfMouse, yOfMouse, 5, 5);
+	}
+	
 	public void paintComponent(Graphics g) {
 		g.drawImage(i, 0, 0, null);
+	}
+	
+	public class MouseController extends MouseInputAdapter {
+		boolean oddPressTime = false;
+		
+		public void mousePressed(MouseEvent e) {
+			xOfMouse = e.getX();
+			yOfMouse = e.getY();
+			oddPressTime = !oddPressTime;
+			repaint();
+		}
 	}
 }
