@@ -83,7 +83,7 @@ public class MainDialog extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				//brian.test();
-				BufferedImage i = null;
+				Image i = null;
 				try {
 					i = brian.readFile();
 				} catch (IOException e) {

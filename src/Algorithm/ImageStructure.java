@@ -12,7 +12,7 @@ public class ImageStructure {
 	 * there should be a constructor with an input image
 	 * @param i is the image I loaded
 	 */
-	ImageStructure(BufferedImage i) {
+	public ImageStructure(BufferedImage i) {
 		
 	}
 	

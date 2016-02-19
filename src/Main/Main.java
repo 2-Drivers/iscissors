@@ -9,5 +9,6 @@ public class Main {
 		// TODO Auto-generated method stub
 		MainDialog mainDialog = new MainDialog();
 		mainDialog.setVisible(true);
+		System.out.println(System.getProperty("java.runtime.version"));
 	}
 }

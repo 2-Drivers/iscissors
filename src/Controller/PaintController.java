@@ -44,7 +44,7 @@ public class PaintController {
 		return new Tester(s);
 	}
 	
-	public BufferedImage readFile() throws IOException {
+	public Image readFile() throws IOException {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter f = new FileNameExtensionFilter(
 				"JPG & GIF Images", "jpg", "gif");
@@ -52,7 +52,7 @@ public class PaintController {
 		int returnVal = chooser.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File f2 = chooser.getSelectedFile();
-			BufferedImage returnValue = ImageIO.read(f2);
+			Image returnValue = ImageIO.read(f2);
 			return returnValue;
 		} else return null;
 	}

@@ -11,7 +11,7 @@ public class ImageNodeStructure {
 	
 	ImageNodeStructure(int i) {
 		pixelValue = i;
-		computeAllEdges();
+		//?computeAllEdges();
 	}
 	
 	public void computeAllEdges() {

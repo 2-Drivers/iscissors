@@ -3,12 +3,15 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -27,9 +30,11 @@ import Controller.PaintController;
  */
 public class DrawingPad extends JPanel {
 	//JPanel realPanel;
+	boolean imageChanged = false;
 	Image i;
+	JLabel imageLabel;
 	MouseController m;
-	int xOfMouse, yOfMouse = Integer.MAX_VALUE;
+	Vector<Dimension> coordinates;
 	
 	public DrawingPad() {
 		setBackground(Color.GREEN);
@@ -37,32 +42,46 @@ public class DrawingPad extends JPanel {
 		i = null;
 		m = new MouseController();
 		this.addMouseListener(m);
+		imageLabel = new JLabel();
+		coordinates = new Vector<Dimension>();
 		//setVisible(true);
 	}
 
 	public void setImage(Image i2) {
 		i = i2;
-		validate();
+		imageChanged = true;
+		repaint();
 		int height = i2.getHeight(null);
 		int width = i2.getWidth(null);
 		setPreferredSize(new Dimension(width, height));
+		ImageIcon ic = new ImageIcon(i);
+		imageLabel = new JLabel(ic);
+		imageLabel.setVerticalAlignment(JLabel.TOP);
+		imageLabel.setHorizontalAlignment(JLabel.LEFT);
+		coordinates = new Vector<Dimension>();
+		
+		setOpaque(true);
+		validate();
 	}
 	
-	public void paint(Graphics g) {
-		g.drawOval(xOfMouse, yOfMouse, 5, 5);
-	}
-	
-	public void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {	
 		g.drawImage(i, 0, 0, null);
+		
+		Iterator<Dimension> it = coordinates.iterator();
+		while (it.hasNext()) {
+			Dimension d = it.next();
+			g.drawOval((int)d.getWidth(), (int)d.getHeight(), 5, 5);
+		}
 	}
 	
 	public class MouseController extends MouseInputAdapter {
 		boolean oddPressTime = false;
 		
 		public void mousePressed(MouseEvent e) {
-			xOfMouse = e.getX();
-			yOfMouse = e.getY();
-			oddPressTime = !oddPressTime;
+			int x = e.getX();
+			int y = e.getY();
+			//oddPressTime = !oddPressTime;
+			coordinates.addElement(new Dimension(x,y));
 			repaint();
 		}
 	}
