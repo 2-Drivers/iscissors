@@ -28,6 +28,17 @@ import javax.swing.JScrollPane;
 
 import Controller.PaintController;
 
+
+/**
+ * this is the GUI interface for the main dialog of the program
+ * in the dialog there will be a menu list
+ * as well as a drawing pad inheriting from JPanel
+ * which is aimed to be a canvas
+ * since there is shortage of functions in Canvas class
+ * 
+ * @author JX
+ *
+ */
 public class MainDialog extends JFrame {
 	private JFrame frame;
 	private JMenuBar menuBar;
@@ -59,6 +70,11 @@ public class MainDialog extends JFrame {
 		jsp.getViewport().setOpaque(true);
 	}
 	
+	/**
+	 * it creates the buttons on the menu list
+	 * 
+	 * but many of them is yet to be finished
+	 */
 	private void createAllButtons() {
 		// initialize the components
 		frame = new JFrame();
@@ -75,11 +91,16 @@ public class MainDialog extends JFrame {
 		menuBar.add(menu2);
 		menuBar.add(menu3);
 		
-		JMenuItem item1;
-		item1 = new JMenuItem("Test Item");
-		item1.addActionListener(new ActionListener(){
+		JMenuItem item1_1;
+		item1_1 = new JMenuItem("Test Item");
+		item1_1.addActionListener(new ActionListener(){
 
 			@Override
+			/**
+			 * once a picture is selected the interface is handled to be updated
+			 * 
+			 * to do: the cases when no picture is selected, i.e. return null 
+			 */
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				//brian.test();
@@ -94,13 +115,14 @@ public class MainDialog extends JFrame {
 				int height = i.getHeight(null);
 				int width = i.getWidth(null);
 				jsp.setPreferredSize(new Dimension(width, height));
+				drawingPad.setPreferredSize(new Dimension(width, height));
 				jsp.resize(new Dimension(width+10, height+10));
 				setSize(new Dimension(width+20, height+80));
 				jsp.validate();
 				repaint();
 			}
 		});
-		menu1.add(item1);
+		menu1.add(item1_1);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}	

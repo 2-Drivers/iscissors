@@ -27,15 +27,6 @@ import GUI.Tester;
 public class PaintController {
 	private static PaintController singeleton = null;
 	
-	//private MainDialog mainDialog;
-	//private MouseListener mListener;
-	//private KeyboardListener kListener;
-
-	public PaintController() 
-	{
-		;
-	}
-	
 	public Tester test() {
 		return new Tester();
 	}
@@ -55,6 +46,23 @@ public class PaintController {
 			Image returnValue = ImageIO.read(f2);
 			return returnValue;
 		} else return null;
+	}
+	
+	/**
+	 * 
+	 * @return the image including the contours
+	 * @throws IOException
+	 */
+	public Image saveFile() throws IOException {
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter f = new FileNameExtensionFilter(
+				"JPG & GIF Images", "jpg", "gif");
+		chooser.setFileFilter(f);
+		int returnVal = chooser.showSaveDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			
+		}
+		return null;
 	}
 	
 	public void drawImage(Image i) {
