@@ -116,7 +116,7 @@ public class MainDialog extends JFrame {
 				int height = i.getHeight(null);
 				int width = i.getWidth(null);
 				jsp.setPreferredSize(new Dimension(width, height));
-				drawingPad.setPreferredSize(new Dimension(width, height));
+				drawingPad.setSize(new Dimension(width, height));
 				jsp.resize(new Dimension(width+10, height+10));
 				setSize(new Dimension(width+20, height+80));
 				jsp.validate();

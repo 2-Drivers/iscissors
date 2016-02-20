@@ -79,6 +79,10 @@ public class DrawingPad extends JPanel {
 		validate();
 	}
 	
+	public Image getImage() {
+		return i;
+	}
+	
 	/**
 	 * overload the default method
 	 * so that each time the picture and vector dots are repainted

@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Algorithm.ImageStructure;
+import GUI.DrawingPad;
 import GUI.MainDialog;
 import GUI.Tester;
 
@@ -81,13 +82,13 @@ public class PaintController {
 		}
 	}
 	
-	public void saveFile(JPanel jp) {
-		int w = jp.getWidth();
-		int h = jp.getHeight();
-		jp.repaint();
+	public void saveFile(DrawingPad dp) {
+		int w = dp.getImage().getWidth(null);
+		int h = dp.getImage().getHeight(null);
+		dp.repaint();
 		BufferedImage bi = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
 		Graphics g2 = bi.createGraphics();
-		jp.paint(g2);
+		dp.paint(g2);
 		try {
 			writeImage(bi);
 		} catch (IOException e) {
