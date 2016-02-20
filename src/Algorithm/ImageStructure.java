@@ -24,7 +24,7 @@ public class ImageStructure {
 	 * @param endY
 	 * @return in the form of {startnode, next, next ... endnode}
 	 */
-	int[] getShortestPath(int StartX, int StartY, int endX, int endY) {
+	Coordinate[] getShortestPath(int StartX, int StartY, int endX, int endY) {
 		return null;
 	}
 	

@@ -2,17 +2,21 @@ package Controller;
 
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import Algorithm.ImageStructure;
 import GUI.MainDialog;
 import GUI.Tester;
 
@@ -25,7 +29,9 @@ import GUI.Tester;
  * can be initialized only once
  */
 public class PaintController {
-	private static PaintController singeleton = null;
+	
+	ImageStructure ist;
+	private ComputeController cc;
 	
 	public Tester test() {
 		return new Tester();
@@ -35,7 +41,11 @@ public class PaintController {
 		return new Tester(s);
 	}
 	
-	public Image readFile() throws IOException {
+	public void setImageStructure(BufferedImage i) {
+		cc.setImageStructure(i);
+	}
+	
+	public BufferedImage readFile() throws IOException {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter f = new FileNameExtensionFilter(
 				"JPG & GIF Images", "jpg", "gif");
@@ -43,7 +53,7 @@ public class PaintController {
 		int returnVal = chooser.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File f2 = chooser.getSelectedFile();
-			Image returnValue = ImageIO.read(f2);
+			BufferedImage returnValue = ImageIO.read(f2);
 			return returnValue;
 		} else return null;
 	}
@@ -53,16 +63,37 @@ public class PaintController {
 	 * @return the image including the contours
 	 * @throws IOException
 	 */
-	public Image saveFile() throws IOException {
+	private void writeImage(BufferedImage i) throws IOException {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter f = new FileNameExtensionFilter(
 				"JPG & GIF Images", "jpg", "gif");
 		chooser.setFileFilter(f);
 		int returnVal = chooser.showSaveDialog(null);
+		File fileToSave;
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			
+			fileToSave = chooser.getSelectedFile();
+			try {
+				ImageIO.write(i, "jpg", fileToSave);
+				System.out.println(fileToSave.getName());
+			} catch (IOException ex) {
+				System.out.println("zzzzz");
+			}
 		}
-		return null;
+	}
+	
+	public void saveFile(JPanel jp) {
+		int w = jp.getWidth();
+		int h = jp.getHeight();
+		jp.repaint();
+		BufferedImage bi = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+		Graphics g2 = bi.createGraphics();
+		jp.paint(g2);
+		try {
+			writeImage(bi);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void drawImage(Image i) {

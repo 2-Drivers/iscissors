@@ -9,6 +9,9 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
@@ -21,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.MouseInputAdapter;
 
+import Algorithm.Coordinate;
 import Controller.PaintController;
 
 /**
@@ -35,7 +39,8 @@ public class DrawingPad extends JPanel {
 	Image i;
 	JLabel imageLabel;
 	MouseController m;
-	Vector<Dimension> coordinates;
+	KeyboardController k;
+	Vector<Coordinate> coordinates;
 	
 	public DrawingPad() {
 		setBackground(Color.GREEN);
@@ -45,8 +50,12 @@ public class DrawingPad extends JPanel {
 		i = null;
 		m = new MouseController();
 		this.addMouseListener(m);
+		k = new KeyboardController();
+		this.addKeyListener(k);
+		this.setFocusable(true);
+		requestFocusInWindow();
 		imageLabel = new JLabel();
-		coordinates = new Vector<Dimension>();
+		coordinates = new Vector<Coordinate>();
 		//setVisible(true);
 	}
 
@@ -65,7 +74,7 @@ public class DrawingPad extends JPanel {
 		int height = i2.getHeight(null);
 		int width = i2.getWidth(null);
 		setPreferredSize(new Dimension(width, height));
-		coordinates = new Vector<Dimension>();
+		coordinates = new Vector<Coordinate>();
 		setOpaque(true);
 		validate();
 	}
@@ -77,15 +86,14 @@ public class DrawingPad extends JPanel {
 	 * i.e. more effective one
 	 */
 	public void paintComponent(Graphics g) {
-		System.out.println("123");
 		g.drawImage(i, 0, 0, null);
 		imageChanged = false;
 		
-		Iterator<Dimension> it = coordinates.iterator();
+		Iterator<Coordinate> it = coordinates.iterator();
 		while (it.hasNext()) {
-			Dimension d = it.next();
+			Coordinate c = it.next();
 			g.setColor(Color.RED);
-			g.drawOval((int)d.getWidth(), (int)d.getHeight(), 5, 5);
+			g.drawOval((int)c.x(), (int)c.y(), 5, 5);
 		}
 	}
 	
@@ -103,10 +111,31 @@ public class DrawingPad extends JPanel {
 				int x = e.getX();
 				int y = e.getY();
 				if ((x <= xMax) && (y <= yMax)) {
-					coordinates.addElement(new Dimension(x,y));
+					coordinates.addElement(new Coordinate(x,y));
 					repaint(new Rectangle(x-3,y-3,x+3,y+3));
 				}
 			}
 		}
+	}
+	
+	public class KeyboardController extends KeyAdapter {
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			//System.out.println(arg0.getKeyCode());
+			if (arg0.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+				//System.out.println("backspace");
+				if (coordinates.size() != 0) {
+					coordinates.remove(coordinates.size() - 1);
+					repaint(); //<!which one>
+				}
+			} else if (true) {
+				;
+			}
+		}
+	}
+	
+	private void setKeys() {
 	}
 }

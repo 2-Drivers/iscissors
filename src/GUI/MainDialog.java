@@ -92,7 +92,7 @@ public class MainDialog extends JFrame {
 		menuBar.add(menu3);
 		
 		JMenuItem item1_1;
-		item1_1 = new JMenuItem("Test Item");
+		item1_1 = new JMenuItem("Open..");
 		item1_1.addActionListener(new ActionListener(){
 
 			@Override
@@ -104,7 +104,7 @@ public class MainDialog extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				//brian.test();
-				Image i = null;
+				BufferedImage i = null;
 				try {
 					i = brian.readFile();
 				} catch (IOException e) {
@@ -112,6 +112,7 @@ public class MainDialog extends JFrame {
 					e.printStackTrace();
 				}
 				drawingPad.setImage(i);
+				//brian.setImageStructure(i);
 				int height = i.getHeight(null);
 				int width = i.getWidth(null);
 				jsp.setPreferredSize(new Dimension(width, height));
@@ -124,6 +125,38 @@ public class MainDialog extends JFrame {
 		});
 		menu1.add(item1_1);
 		
+		JMenuItem item1_2;
+		item1_2 = new JMenuItem("Save with Contour");
+		//add action listener 
+		item1_2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				brian.saveFile(drawingPad);
+			}
+		});
+		menu1.add(item1_2);
+		
+		JMenuItem item1_3;
+		item1_3 = new JMenuItem("Exit");
+		
+		menu1.add(item1_3);
+		
+		JMenuItem item2_1 = new JMenuItem("Work Mode");
+		menu2.add(item2_1);
+		
+		JMenuItem item2_2 = new JMenuItem("Debug Mode");
+		menu2.add(item2_2);
+		
+		JMenuItem item3_1 = new JMenuItem("About");
+		menu3.add(item3_1);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}	
+
+	/**
+	 * this function sets all keyboard listeners
+	 * once the constructor is called
+	 */
 }
