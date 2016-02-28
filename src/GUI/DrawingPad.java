@@ -42,6 +42,12 @@ public class DrawingPad extends JPanel {
 	KeyboardController k;
 	Vector<Coordinate> coordinates;
 	
+	boolean ctrlKey = false;
+	boolean plusKey = false;
+	boolean minusKey = false;
+	boolean enterKey = false;
+	boolean backspaceKey = false;
+	
 	public DrawingPad() {
 		setBackground(Color.GREEN);
 		setPreferredSize(new Dimension(400,300));
@@ -127,15 +133,43 @@ public class DrawingPad extends JPanel {
 		@Override
 		public void keyPressed(KeyEvent arg0) {
 			// TODO Auto-generated method stub
-			//System.out.println(arg0.getKeyCode());
-			if (arg0.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+			int i = arg0.getKeyCode();
+			
+			switch(i) {
+			case KeyEvent.VK_CONTROL: ctrlKey = true; break;
+			case KeyEvent.VK_ADD: plusKey = true; break;
+			case KeyEvent.VK_MINUS: minusKey = true; break;
+			case KeyEvent.VK_ENTER: enterKey = true; break;
+			case KeyEvent.VK_BACK_SPACE: backspaceKey = true; break;
+			}
+			if (backspaceKey) {
 				//System.out.println("backspace");
 				if (coordinates.size() != 0) {
 					coordinates.remove(coordinates.size() - 1);
 					repaint(); //<!which one>
+				} 
+			} else if (ctrlKey) {
+				int width, height;
+				
+				if (plusKey) {
+					
+				} else if (minusKey) {
+					
 				}
-			} else if (true) {
-				;
+				//implement other methods;
+			} else if (enterKey) {
+				
+			}
+		}
+		
+		public void KeyReleased(KeyEvent e) {
+			int i = e.getKeyCode();
+			switch (i) {
+			case KeyEvent.VK_CONTROL: ctrlKey = false; break;
+			case KeyEvent.VK_ADD: plusKey = false; break;
+			case KeyEvent.VK_MINUS: minusKey = false; break;
+			case KeyEvent.VK_ENTER: enterKey = false; break;
+			case KeyEvent.VK_BACK_SPACE: backspaceKey = false; break;
 			}
 		}
 	}

@@ -112,7 +112,7 @@ public class MainDialog extends JFrame {
 					e.printStackTrace();
 				}
 				drawingPad.setImage(i);
-				//brian.setImageStructure(i);
+				brian.setImageStructure(i);
 				int height = i.getHeight(null);
 				int width = i.getWidth(null);
 				jsp.setPreferredSize(new Dimension(width, height));

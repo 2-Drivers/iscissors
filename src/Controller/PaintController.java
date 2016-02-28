@@ -34,6 +34,11 @@ public class PaintController {
 	ImageStructure ist;
 	private ComputeController cc;
 	
+	public PaintController() {
+		ist = new ImageStructure();
+		cc = new ComputeController();
+	}
+	
 	public Tester test() {
 		return new Tester();
 	}
