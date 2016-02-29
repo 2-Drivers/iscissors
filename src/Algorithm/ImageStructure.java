@@ -216,8 +216,8 @@ public class ImageStructure {
 	
 	public void buildMiniCostTree (int StartX, int StartY)
 	{
-		PriorityQueue<Node> pq = new PriorityQueue<Node>();
-		
+		//PriorityQueue<Node> pq = new PriorityQueue<Node>();
+		MyPriorityQueue pq = new MyPriorityQueue();
 		//initialize each node to the INITIAL state, i.e. state = 0
 		Iterator<Node> it = pixels.iterator();
 		while (it.hasNext())
@@ -284,7 +284,8 @@ public class ImageStructure {
 		Vector<Coordinate> answer = new Vector<Coordinate>();
 		Iterator<Node> it =  path.iterator();
 		while (it.hasNext()) {
-			answer.add(new Coordinate(it.next().x, it.next().y));
+			Node c = it.next();
+			answer.add(new Coordinate(c.x, c.y));
 		}
 		return answer;
 	}

@@ -7,7 +7,7 @@ import java.awt.Color;
  * in whatever way you like
  * same for the ImageNodeStructure class
  */
-public class Node implements Comparable<Node>{
+public class Node { //implements Comparable<Node>{
 	public double[] edges;
 	public double[] costs;
 	public final int red;
@@ -48,9 +48,11 @@ public class Node implements Comparable<Node>{
 		return predecessor;
 	}
 
+	/*
 	@Override
 	public int compareTo(Node o) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	*/
 }

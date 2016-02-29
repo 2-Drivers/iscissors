@@ -156,10 +156,14 @@ public class DrawingPad extends JPanel {
 					}
 					Iterator<Coordinate> it = path.iterator();
 					
+					System.out.println(path.size());
+					
 					while (it.hasNext()) {
 						Coordinate c = it.next();
 						coordinates.add(c);
 					}
+					System.out.println(coordinates.size());
+					repaint();
 				}
 			}
 		}
