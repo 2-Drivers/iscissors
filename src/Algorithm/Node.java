@@ -7,13 +7,19 @@ import java.awt.Color;
  * in whatever way you like
  * same for the ImageNodeStructure class
  */
-public class ImageNodeStructure {
+public class Node {
 	public double[] edges;
+	public double[] costs;
 	public final int red;
 	public final int green;
 	public final int blue;
-	
-	ImageNodeStructure(Color c) {
+	public Node predecessor;
+	public int state;
+	public int x, y;
+	public double cost;
+	Node(Color c,int xx, int yy) {
+		x = xx;
+		y = yy;
 		red = c.getRed();
 		green = c.getGreen();
 		blue = c.getBlue();
@@ -21,5 +27,12 @@ public class ImageNodeStructure {
 		for (int i = 0; i < 8; ++i) {
 			edges[i] = 0;
 		}
+		costs = new double[8];
+		for (int i = 0; i < 8; ++i) {
+			costs[i] = 0;
+		}
+		state = 0;
+		predecessor = null;
+		cost = 0;
 	}
 }
