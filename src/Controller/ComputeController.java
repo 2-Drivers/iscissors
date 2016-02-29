@@ -23,8 +23,8 @@ public class ComputeController {
 	 * @param c2
 	 * @return
 	 */
-	public Coordinate[] getShortestPath(Coordinate c1, Coordinate c2) {
-		return null;
+	public Vector<Coordinate> getShortestPath(Coordinate c1, Coordinate c2) {
+		return ist.getPath(c1, c2);
 	}
 	
 	/**

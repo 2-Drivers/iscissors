@@ -57,7 +57,7 @@ public class MainDialog extends JFrame {
 		this.setSize(400,300);
 		brian = new PaintController();
 		//Image bgimage = new ImageIcon("/home/JX/code/comp5421/iscissors/test.jpg").getImage();
-		drawingPad = new DrawingPad();
+		drawingPad = new DrawingPad(brian);
 		jsp = new JScrollPane(drawingPad);
 		jsp.setPreferredSize(drawingPad.getSize());
 		jsp.setVisible(true);

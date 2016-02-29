@@ -32,7 +32,7 @@ import GUI.Tester;
 public class PaintController {
 	
 	ImageStructure ist;
-	private ComputeController cc;
+	public ComputeController cc;
 	
 	public PaintController() {
 		ist = new ImageStructure();

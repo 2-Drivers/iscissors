@@ -1,18 +1,19 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.Vector;
@@ -39,8 +40,15 @@ public class DrawingPad extends JPanel {
 	Image i;
 	JLabel imageLabel;
 	MouseController m;
+	MousemoveListener l;
 	KeyboardController k;
 	Vector<Coordinate> coordinates;
+	
+	Vector<Coordinate> path;
+	
+	int expandTime;
+	boolean enabled;
+	private PaintController brian;
 	
 	boolean ctrlKey = false;
 	boolean plusKey = false;
@@ -48,21 +56,29 @@ public class DrawingPad extends JPanel {
 	boolean enterKey = false;
 	boolean backspaceKey = false;
 	
-	public DrawingPad() {
+	public DrawingPad(PaintController pc) {
+		brian = pc;
 		setBackground(Color.GREEN);
 		setPreferredSize(new Dimension(400,300));
 		imageChanged = false;
 		imageSet = false;
 		i = null;
 		m = new MouseController();
+		l = new MousemoveListener();
 		this.addMouseListener(m);
+		this.addMouseMotionListener(l);
 		k = new KeyboardController();
 		this.addKeyListener(k);
 		this.setFocusable(true);
 		requestFocusInWindow();
 		imageLabel = new JLabel();
+		
+		path = new Vector<Coordinate>();
 		coordinates = new Vector<Coordinate>();
 		//setVisible(true);
+		
+		expandTime = 0;
+		enabled = false;
 	}
 
 	/**
@@ -103,7 +119,7 @@ public class DrawingPad extends JPanel {
 		while (it.hasNext()) {
 			Coordinate c = it.next();
 			g.setColor(Color.RED);
-			g.drawOval((int)c.x(), (int)c.y(), 5, 5);
+			g.drawOval((int)c.x(), (int)c.y(), 0, 0);
 		}
 	}
 	
@@ -115,26 +131,80 @@ public class DrawingPad extends JPanel {
 	 */
 	public class MouseController extends MouseInputAdapter {
 		public void mousePressed(MouseEvent e) {
-			if (!imageSet) {;} else {
-				int xMax = i.getWidth(null);
-				int yMax = i.getHeight(null);
-				int x = e.getX();
-				int y = e.getY();
-				if ((x <= xMax) && (y <= yMax)) {
-					coordinates.addElement(new Coordinate(x,y));
-					repaint(new Rectangle(x-3,y-3,x+3,y+3));
+			if (!imageSet) {
+				;
+			} else {
+				if (!enabled) {
+					if (ctrlKey) {
+						enabled = true;
+						System.out.println(e.getX());
+						System.out.println(e.getY());
+					}
+				}
+			
+				if (enabled) {
+					int xMax = i.getWidth(null);
+					int yMax = i.getHeight(null);
+					int x = e.getX();
+					int y = e.getY();
+					if ((coordinates == null) & (ctrlKey)) {
+						coordinates = new Vector<Coordinate>();
+					}
+					if ((x <= xMax) && (y <= yMax)) {
+						coordinates.addElement(new Coordinate(x,y));
+						repaint(new Rectangle(x,y,x,y));
+					}
+					Iterator<Coordinate> it = path.iterator();
+					
+					while (it.hasNext()) {
+						Coordinate c = it.next();
+						coordinates.add(c);
+					}
 				}
 			}
 		}
+		/*
+		public void mouseDragged(MouseEvent e) {
+			int currentX = e.getX();
+			int currentY = e.getY();
+			int lastX = coordinates.lastElement().x();
+			int lastY = coordinates.lastElement().y();
+			
+			System.out.println(currentX);
+			//new Coordinate(currentX, currentY);
+			
+			Vector<Coordinate> path = brian.cc.getShortestPath(new Coordinate(lastX, lastY), new Coordinate(currentX, currentY));
+		}
+		*/
+	}
+	
+	public class MousemoveListener extends MouseMotionAdapter {
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			//Point p = MouseInfo.getPointerInfo().getLocation();
+			int currentX = e.getX();
+			int currentY = e.getY();
+			if (coordinates.size() != 0) {
+				int lastX = coordinates.lastElement().x();
+				int lastY = coordinates.lastElement().y();
+				path = brian.cc.getShortestPath(new Coordinate(lastX, lastY), new Coordinate(currentX, currentY));
+			}
+		}
+		
 	}
 	
 	public class KeyboardController extends KeyAdapter {
 
-		@Override
 		public void keyPressed(KeyEvent arg0) {
 			// TODO Auto-generated method stub
 			int i = arg0.getKeyCode();
-			
 			switch(i) {
 			case KeyEvent.VK_CONTROL: ctrlKey = true; break;
 			case KeyEvent.VK_ADD: plusKey = true; break;
@@ -147,23 +217,29 @@ public class DrawingPad extends JPanel {
 				if (coordinates.size() != 0) {
 					coordinates.remove(coordinates.size() - 1);
 					repaint(); //<!which one>
-				} 
-			} else if (ctrlKey) {
-				int width, height;
+				}
 				
+				if(coordinates.size() == 0) {
+					enabled = false;
+				}
+			} else if (ctrlKey) {
 				if (plusKey) {
-					
+					expandTime += 1;
+					plusKey = false;
 				} else if (minusKey) {
-					
+					expandTime -= 1;
+					plusKey = false;
+				} else if (enterKey) {
+					enabled = false;
 				}
 				//implement other methods;
 			} else if (enterKey) {
-				
+				; //?
 			}
 		}
 		
-		public void KeyReleased(KeyEvent e) {
-			int i = e.getKeyCode();
+		public void keyReleased(KeyEvent arg0) {
+			int i = arg0.getKeyCode();
 			switch (i) {
 			case KeyEvent.VK_CONTROL: ctrlKey = false; break;
 			case KeyEvent.VK_ADD: plusKey = false; break;
@@ -172,8 +248,5 @@ public class DrawingPad extends JPanel {
 			case KeyEvent.VK_BACK_SPACE: backspaceKey = false; break;
 			}
 		}
-	}
-	
-	private void setKeys() {
 	}
 }

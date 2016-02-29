@@ -174,15 +174,7 @@ public class ImageStructure {
 		
 		return null;
 	}
-	
-	/**
-	 * this is only implemented when necessary
-	 * @return
-	 */
-	int getPathLength() {
-		return 0;
-	}
-	
+
 	Vector<Node> getNeighbors(int x, int y)	{
 		
 		Vector<Node> neighbors = new Vector<Node>();
@@ -193,16 +185,18 @@ public class ImageStructure {
 			{
 				if (x + xx < 0 || x + xx >= width || y + yy < 0 || y + yy >= height)
 					continue;
-				neighbors.add(pixels.get((x + xx) * height + (y + yy) * width));
+				//neighbors.add(pixels.get((x + xx) * height + (y + yy) * width)); //?
+				neighbors.add(pixels.get((y + yy) * width + x + xx));
 			}
 		}
+		
 		return neighbors;
 		
 	}
 	
 	int link(Node start, Node end)
 	{
-		int dx = end.x - start.x;
+		int dx = end.x - start.x; ///by default it is private;
 		int dy = end.y - start.y;
 		
 		if (dx == 1 && dy == 0) return 0;
@@ -213,10 +207,14 @@ public class ImageStructure {
 		if (dx == -1 && dy == 1) return 5;
 		if (dx == 0 && dy == 1) return 6;
 		if (dx == 1 && dy == 1) return 7;
+		System.out.println(end.x);
+		System.out.println(start.x);
+		System.out.println(end.y);
+		System.out.println(start.y);
 		return -1;
 	}
 	
-	void buildMiniCostTree (int StartX, int StartY)
+	public void buildMiniCostTree (int StartX, int StartY)
 	{
 		PriorityQueue<Node> pq = new PriorityQueue<Node>();
 		
@@ -228,7 +226,8 @@ public class ImageStructure {
 			temp.state = 0;
 		}
 		
-		Node seed = pixels.get(StartX*height + StartY*width);
+		//Node seed = pixels.get(StartX*height + StartY*width);
+		Node seed = pixels.get(StartX + (StartY - 1) * width);
 		seed.predecessor = null;
 		seed.cost = 0;
 		pq.add(seed);
@@ -237,7 +236,7 @@ public class ImageStructure {
 		{
 			Node q = pq.poll();
 			q.state = 2; //state = 2 means EXPANDED
-			Vector<Node> neighbors = getNeighbors(q.x, q.y);
+			Vector<Node> neighbors = getNeighbors(q.x, q.y); ///??????????????????
 			Iterator<Node> r = neighbors.iterator();
 			while (r.hasNext())
 			{
@@ -245,7 +244,7 @@ public class ImageStructure {
 				if (temp.state == 0) // state INITIAL
 				{
 					temp.predecessor = q;
-					temp.cost = q.cost + q.costs[link(q,temp)];
+					temp.cost = q.cost + q.costs[link(q,temp)]; //?*2
 					temp.state = 1;
 					pq.add(temp);
 				}
@@ -261,5 +260,32 @@ public class ImageStructure {
 		}
 	}
 	
-	
+	public Vector<Coordinate> getPath(Coordinate c1, Coordinate c2) {
+		int startX, startY, endX, endY;
+		startX = c1.x();
+		startY = c1.y();
+		endX = c2.x();
+		endY = c2.y();
+		
+		buildMiniCostTree(startX, startY);
+		Vector<Node> path = new Vector<Node>();
+		Node end = pixels.get(endX + (endY - 1) * width);
+		while (end.predecessor != null)
+		{
+			path.add(end);
+			end = end.predecessor;
+			//System.out.println("1");
+		}
+		path.add(end);
+		
+		System.out.println("zzzzzz");
+		System.out.println(path.size());
+		
+		Vector<Coordinate> answer = new Vector<Coordinate>();
+		Iterator<Node> it =  path.iterator();
+		while (it.hasNext()) {
+			answer.add(new Coordinate(it.next().x, it.next().y));
+		}
+		return answer;
+	}
 }
